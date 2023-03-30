@@ -33,7 +33,7 @@ const FixChoose = React.forwardRef(
               name={name}
               value={fix.price}
               id={fix.id}
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => setCurrentFix(e)}
+              onClick={() => dispatch(getFixID(JSON.stringify(fix)))}
             />
             <label
               htmlFor={fix.id}

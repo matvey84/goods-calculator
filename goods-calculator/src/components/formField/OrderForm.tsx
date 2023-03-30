@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { orderCreater } from '../../handlers/handlers';
 import { getFilterListsAction, getFixValue } from '../../redux/formSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { IOrderFormData } from '../../types/types';
+import { currentOrderData, IOrderFormData } from '../../types/types';
 import CastomerParametrInput from '../../UI/CastomerParametrInput';
 import FilterListMaterial from '../../UI/FilterCtegoriButton';
 import FixChoose from '../../UI/FixChoose';
@@ -16,6 +16,8 @@ function OrderForm() {
   const dispatch = useAppDispatch();
   const sizeInputConfig = useAppSelector((state) => state.formSlice.sizeInputConfig);
   const currentFixValue = useAppSelector((state) => state.formSlice.currentFixValue);
+  const goodsType = useAppSelector((state) => state.formSlice.goodsType);
+  const currentFix = useAppSelector((state) => state.formSlice.currentFix);
   const width = sizeInputConfig.find((config) => config.key === 'width');
   const length = sizeInputConfig.find((config) => config.key === 'length');
   const [errorInputMessage, setErrorInputMessage] = useState<string>('');
@@ -28,10 +30,6 @@ function OrderForm() {
     reset,
   } = useForm<IOrderFormData>({
     mode: 'onBlur',
-    defaultValues: {
-      fixValue: useAppSelector((state) => state.formSlice.currentFixValue),
-      fixPrice: useAppSelector((state) => state.formSlice.currentFixPrice),
-    },
   });
 
   const selectPipe = register('pipe', { required: 'Это обязательное поле!' });
@@ -43,9 +41,8 @@ function OrderForm() {
   });
 
   const selectFrame = register('frameStep', { required: 'Это обязательное поле!' });
-  const chooseFix = register('fixPrice', {
+  const chooseFix = register('fix', {
     required: 'Это обязательное поле!',
-    validate: (value) => value > 0 || 'Это обязательное поле!',
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
       setFixValueError(e.currentTarget.value);
     },
@@ -82,9 +79,16 @@ function OrderForm() {
   const formSubmitHandler: SubmitHandler<IOrderFormData> = (data: IOrderFormData) => {
     const completedData: IOrderFormData = {
       ...data,
-      fixValue: currentFixValue!,
+      fixValue: String(currentFixValue!),
+      fix: currentFix!,
     };
-    dispatch(orderCreater(completedData));
+
+    const workData = Object.fromEntries(
+      Object.entries(completedData).map((prop) => {
+        return goodsType.some((type) => type === prop[0]) ? [prop[0], JSON.parse(prop[1])] : prop;
+      })
+    ) as currentOrderData;
+    dispatch(orderCreater(workData, goodsType));
   };
 
   useEffect(() => {
@@ -103,10 +107,6 @@ function OrderForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-
-  // useMemo(() => {
-  //   setFixValue(currentFixValue!);
-  // }, [currentFixValue]);
 
   return (
     <section className="order-form-field">
