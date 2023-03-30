@@ -72,10 +72,22 @@ export interface IFixConfig {
 export interface IOrderFormData {
   list: string;
   pipe: string;
-  frameStep: number;
+  frameStep: string;
   width: string;
   length: string;
   category: string;
-  fixValue: number;
-  fixPrice: number | string;
+  fixValue: string;
+  fix: string;
+  [x: string]: string;
+}
+
+export interface currentOrderData {
+  pipe: IPipe;
+  list: IList;
+  frameStep: string;
+  fix: IFix;
+  category: string;
+  width: number;
+  length: number;
+  fixValue: string;
 }
