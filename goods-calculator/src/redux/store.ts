@@ -10,6 +10,7 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import formSlice from './formSlice';
 
 const persistConfig = {
   key: 'root',
@@ -17,7 +18,9 @@ const persistConfig = {
   storage,
 };
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+  formSlice,
+});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
