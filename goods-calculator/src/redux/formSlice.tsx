@@ -15,6 +15,7 @@ import {
 interface IFormSlice {
   materialBD: ICommonMaterials[];
   configBD: ICommonConfig[];
+  goodsType: string[];
   allLists: IList[];
   pipes: IPipe[];
   allFix: IFix[];
@@ -25,12 +26,13 @@ interface IFormSlice {
   filteredList: IList[];
   listMaterial: string;
   currentFixValue: number | undefined;
-  currentFixID: string | number;
-  currentFixPrice: string | number;
+  currentFixID: string;
+  currentFix: string;
 }
 const initialState: IFormSlice = {
   materialBD: [],
   configBD: configBD,
+  goodsType: [],
   allLists: [],
   pipes: [],
   allFix: [],
@@ -42,7 +44,7 @@ const initialState: IFormSlice = {
   listMaterial: 'all',
   currentFixValue: 5,
   currentFixID: '',
-  currentFixPrice: 0,
+  currentFix: '',
 };
 export const formSlice = createSlice({
   name: 'form',
@@ -50,6 +52,7 @@ export const formSlice = createSlice({
   reducers: {
     getDataAction(state, action: PayloadAction<ICommonMaterials[]>) {
       state.materialBD = action.payload;
+      state.goodsType = Array.from(new Set(action.payload.map((material) => material.type)));
 
       state.allLists = action.payload.filter(
         (material) => material.type === 'list'
@@ -94,9 +97,10 @@ export const formSlice = createSlice({
       );
       state.currentFixValue = currentFixConfig?.value;
     },
-    getFixID(state, action: PayloadAction<string | number>) {
-      state.currentFixID = action.payload;
-      state.currentFixPrice = action.payload;
+    getFixID(state, action: PayloadAction<string>) {
+      const f: IFix = JSON.parse(action.payload);
+      state.currentFixID = f.id;
+      state.currentFix = action.payload;
     },
   },
 });
