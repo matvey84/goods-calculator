@@ -81,13 +81,51 @@ export interface IOrderFormData {
   [x: string]: string;
 }
 
+export type orderFormDataConfig = {
+  type: string;
+  fixValue: string;
+  length: string;
+  width: string;
+  frameStep: string;
+  [x: string]: string;
+};
+
 export interface currentOrderData {
+  id: string;
+  pipe: string;
+  list: string;
+  fix: string;
+  orderConfig: string;
+}
+
+export type parsedOrderData = {
+  id: string;
   pipe: IPipe;
   list: IList;
-  frameStep: string;
   fix: IFix;
-  category: string;
-  width: number;
-  length: number;
-  fixValue: string;
+  orderConfig: orderFormDataConfig;
+};
+
+export type commonParsedOrderData = {
+  type: string;
+  name: string;
+  material?: string;
+  unit: string;
+  width?: string;
+  price: string;
+  id: string;
+};
+
+export interface IOrder {
+  id: string;
+  orderFormDataID: string;
+  type: string;
+  name: string;
+  unit: string;
+  price: string;
+  ammount: string;
+  commonCost: string;
+  nds: string;
+  costNDS: string;
+  [x: string]: string;
 }
