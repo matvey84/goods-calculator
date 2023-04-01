@@ -8,7 +8,7 @@ interface IProp {
   name: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur: (e: React.FocusEvent<HTMLSelectElement>) => void;
-  required: string | undefined | boolean;
+  required: boolean;
   errors: FieldErrors<IOrderFormData>;
 }
 const SelectList = React.forwardRef(

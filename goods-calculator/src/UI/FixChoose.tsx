@@ -15,25 +15,23 @@ const FixChoose = React.forwardRef(
     const allFix = useAppSelector((state) => state.formSlice.allFix);
     const currentFixID = useAppSelector((state) => state.formSlice.currentFixID);
 
-    const setCurrentFix = (e: React.MouseEvent<HTMLInputElement>) => {
-      dispatch(getFixID(e.currentTarget.value));
-    };
-
     return (
       <>
         {allFix.map((fix) => (
           <>
             <input
-              onChange={onChange}
               key={nanoid()}
               required={required}
               className="order-form_filter-button"
               ref={ref}
               type="radio"
               name={name}
-              value={fix.price}
+              value={JSON.stringify(fix)}
               id={fix.id}
-              onClick={() => dispatch(getFixID(JSON.stringify(fix)))}
+              onChange={onChange}
+              onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                dispatch(getFixID(e.currentTarget.id))
+              }
             />
             <label
               htmlFor={fix.id}

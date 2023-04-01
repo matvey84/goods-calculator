@@ -1,4 +1,3 @@
-import { nanoid } from '@reduxjs/toolkit';
 import React, { useMemo } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { IOrderFormData } from '../types/types';
@@ -7,7 +6,7 @@ interface IProp {
   name: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  required: string | undefined | boolean;
+  required: boolean;
   errors: FieldErrors<IOrderFormData>;
 }
 const CastomerParametrInput = React.forwardRef(
@@ -18,6 +17,7 @@ const CastomerParametrInput = React.forwardRef(
       const currentInputError = errors.length ? errors.length : errors.width;
       return currentInputError?.ref?.name;
     }, [errors.length, errors.width]);
+
     return (
       <input
         ref={ref}
