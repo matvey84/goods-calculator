@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { dataParser, orderCreater } from '../../handlers/handlers';
-import { getFilterListsAction, getFixValue, setOrderFormList } from '../../redux/formSlice';
+import { getFilterListsAction, getFixID, setOrderFormList } from '../../redux/formSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { currentOrderData, IOrderFormData, orderFormDataConfig } from '../../types/types';
-import CastomerParametrInput from '../../UI/CastomerParametrInput';
+import { currentOrderData, IList, IOrderFormData, orderFormDataConfig } from '../../types/types';
+import CastomerParametrInput from '../../UI/CustomerParametrInput';
 import FilterListMaterial from '../../UI/FilterCtegoriButton';
 import FixChoose from '../../UI/FixChoose';
 import SelectFrame from '../../UI/SelectFrame';
@@ -16,34 +16,32 @@ import { nanoid } from '@reduxjs/toolkit';
 function OrderForm() {
   const dispatch = useAppDispatch();
   const sizeInputConfig = useAppSelector((state) => state.formSlice.sizeInputConfig);
-  const currentFixValue = useAppSelector((state) => state.formSlice.currentFixValue);
+  const allFixConfig = useAppSelector((state) => state.formSlice.allFixConfig);
   const goodsType = useAppSelector((state) => state.formSlice.goodsType);
   const width = sizeInputConfig.find((config) => config.key === 'width');
   const length = sizeInputConfig.find((config) => config.key === 'length');
   const [errorInputMessage, setErrorInputMessage] = useState<string>('');
-  const [fixValueError, setFixValueError] = useState<number | string>('');
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitSuccessful },
     reset,
   } = useForm<IOrderFormData>({
-    mode: 'onBlur',
+    mode: 'all',
   });
 
   const selectPipe = register('pipe', { required: 'Это обязательное поле!' });
   const selectList = register('list', {
     required: 'Это обязательное поле!',
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
-      dispatch(getFixValue(e.currentTarget.value));
-    },
   });
 
   const selectFrame = register('frameStep', { required: 'Это обязательное поле!' });
   const chooseFix = register('fix', {
     required: 'Это обязательное поле!',
+    validate: (value) => Boolean(value) || 'Это обязательное поле!',
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFixValueError(e.currentTarget.value);
+      e.currentTarget.classList.toggle('order-form_filter-block__label-green');
     },
   });
   const filter = register('category');
@@ -78,9 +76,14 @@ function OrderForm() {
   const formSubmitHandler: SubmitHandler<IOrderFormData> = (data: IOrderFormData) => {
     const converterMM = 1000;
     const decimalConverterMM = 100;
+    const list: IList = JSON.parse(data.list);
+
+    const currentFixValue = String(
+      allFixConfig.filter((config) => config.key === list.material).at(-1)?.value
+    );
     const configuration: orderFormDataConfig = {
       type: 'orderConfig',
-      fixValue: String(currentFixValue!),
+      fixValue: currentFixValue,
       length:
         Number(data.length) % 10 === 0
           ? String(Number(data.length) * decimalConverterMM)
@@ -102,6 +105,7 @@ function OrderForm() {
     const parsedData = dataParser(completedData, goodsType);
     dispatch(setOrderFormList(parsedData));
     dispatch(orderCreater(parsedData, goodsType));
+    dispatch(getFixID(''));
   };
 
   useEffect(() => {
@@ -113,9 +117,11 @@ function OrderForm() {
     isSubmitSuccessful && reset();
     isSubmitSuccessful && dispatch(getFilterListsAction('all'));
   }, [dispatch, isSubmitSuccessful, reset]);
+
   useEffect(
     () => () => {
       dispatch(getFilterListsAction('all'));
+      dispatch(getFixID(''));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -138,9 +144,7 @@ function OrderForm() {
           errors={errors}
         />
 
-        <fieldset
-          className={!fixValueError ? 'order-form_filter-block__error' : 'order-form_filter-block'}
-        >
+        <fieldset className={'order-form_filter-block__error order-form_filter-block'}>
           <legend>Крепеж</legend>
 
           <FixChoose
@@ -188,7 +192,7 @@ function OrderForm() {
         />
 
         <button className="order-form_submit-button" type="submit" disabled={!isValid}>
-          Сформировать счет.
+          {!isValid ? 'Пустые поля!' : 'Сформировать счет.'}
         </button>
       </form>
     </section>
