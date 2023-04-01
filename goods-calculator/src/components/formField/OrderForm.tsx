@@ -1,9 +1,9 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { orderCreater } from '../../handlers/handlers';
-import { getFilterListsAction, getFixValue } from '../../redux/formSlice';
+import { dataParser, orderCreater } from '../../handlers/handlers';
+import { getFilterListsAction, getFixValue, setOrderFormList } from '../../redux/formSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { currentOrderData, IOrderFormData } from '../../types/types';
+import { currentOrderData, IOrderFormData, orderFormDataConfig } from '../../types/types';
 import CastomerParametrInput from '../../UI/CastomerParametrInput';
 import FilterListMaterial from '../../UI/FilterCtegoriButton';
 import FixChoose from '../../UI/FixChoose';
@@ -11,18 +11,17 @@ import SelectFrame from '../../UI/SelectFrame';
 import SelectList from '../../UI/SelectList';
 import SelectPipe from '../../UI/SelectPipe';
 import './orderFormStyle.scss';
+import { nanoid } from '@reduxjs/toolkit';
 
 function OrderForm() {
   const dispatch = useAppDispatch();
   const sizeInputConfig = useAppSelector((state) => state.formSlice.sizeInputConfig);
   const currentFixValue = useAppSelector((state) => state.formSlice.currentFixValue);
   const goodsType = useAppSelector((state) => state.formSlice.goodsType);
-  const currentFix = useAppSelector((state) => state.formSlice.currentFix);
   const width = sizeInputConfig.find((config) => config.key === 'width');
   const length = sizeInputConfig.find((config) => config.key === 'length');
   const [errorInputMessage, setErrorInputMessage] = useState<string>('');
   const [fixValueError, setFixValueError] = useState<number | string>('');
-
   const {
     register,
     handleSubmit,
@@ -77,18 +76,32 @@ function OrderForm() {
   });
 
   const formSubmitHandler: SubmitHandler<IOrderFormData> = (data: IOrderFormData) => {
-    const completedData: IOrderFormData = {
-      ...data,
+    const converterMM = 1000;
+    const decimalConverterMM = 100;
+    const configuration: orderFormDataConfig = {
+      type: 'orderConfig',
       fixValue: String(currentFixValue!),
-      fix: currentFix!,
+      length:
+        Number(data.length) % 10 === 0
+          ? String(Number(data.length) * decimalConverterMM)
+          : String(Number(data.length) * converterMM),
+      width:
+        Number(data.width) % 10 === 0
+          ? String(Number(data.width) * decimalConverterMM)
+          : String(Number(data.width) * converterMM),
+      frameStep: String(Number(data.frameStep) * converterMM),
+    };
+    const completedData: currentOrderData = {
+      id: nanoid(),
+      list: data.list,
+      pipe: data.pipe,
+      fix: data.fix,
+      orderConfig: JSON.stringify(configuration),
     };
 
-    const workData = Object.fromEntries(
-      Object.entries(completedData).map((prop) => {
-        return goodsType.some((type) => type === prop[0]) ? [prop[0], JSON.parse(prop[1])] : prop;
-      })
-    ) as currentOrderData;
-    dispatch(orderCreater(workData, goodsType));
+    const parsedData = dataParser(completedData, goodsType);
+    dispatch(setOrderFormList(parsedData));
+    dispatch(orderCreater(parsedData, goodsType));
   };
 
   useEffect(() => {
