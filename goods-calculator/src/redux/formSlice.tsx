@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { configBD } from '../DATA/data';
 import {
   ICommonConfig,
   ICommonMaterials,
@@ -8,13 +7,13 @@ import {
   IFrame,
   IList,
   IMaterial,
+  IOrder,
   IPipe,
   ISize,
+  parsedOrderData,
 } from '../types/types';
 
 interface IFormSlice {
-  materialBD: ICommonMaterials[];
-  configBD: ICommonConfig[];
   goodsType: string[];
   allLists: IList[];
   pipes: IPipe[];
@@ -27,11 +26,10 @@ interface IFormSlice {
   listMaterial: string;
   currentFixValue: number | undefined;
   currentFixID: string;
-  currentFix: string;
+  orderFormDataList: parsedOrderData[];
+  orderList: IOrder[][];
 }
 const initialState: IFormSlice = {
-  materialBD: [],
-  configBD: configBD,
   goodsType: [],
   allLists: [],
   pipes: [],
@@ -44,15 +42,16 @@ const initialState: IFormSlice = {
   listMaterial: 'all',
   currentFixValue: 5,
   currentFixID: '',
-  currentFix: '',
+  orderFormDataList: [],
+  orderList: [],
 };
 export const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
     getDataAction(state, action: PayloadAction<ICommonMaterials[]>) {
-      state.materialBD = action.payload;
-      state.goodsType = Array.from(new Set(action.payload.map((material) => material.type)));
+      const arr = Array.from(new Set(action.payload.map((material) => material.type)));
+      state.goodsType = [...arr, 'orderConfig'];
 
       state.allLists = action.payload.filter(
         (material) => material.type === 'list'
@@ -67,7 +66,6 @@ export const formSlice = createSlice({
       ) as Required<IFix>[];
     },
     getConfigAction(state, action: PayloadAction<ICommonConfig[]>) {
-      state.configBD = action.payload;
       state.sizeInputConfig = action.payload.filter(
         (config) => config.type === 'size'
       ) as Required<ISize>[];
@@ -98,12 +96,24 @@ export const formSlice = createSlice({
       state.currentFixValue = currentFixConfig?.value;
     },
     getFixID(state, action: PayloadAction<string>) {
-      const f: IFix = JSON.parse(action.payload);
-      state.currentFixID = f.id;
-      state.currentFix = action.payload;
+      state.currentFixID = action.payload;
+    },
+    setOrderFormList(state, action: PayloadAction<parsedOrderData>) {
+      state.orderFormDataList = [...state.orderFormDataList, action.payload];
+    },
+
+    setOrderList(state, action: PayloadAction<IOrder[]>) {
+      state.orderList = [...state.orderList, action.payload];
     },
   },
 });
-export const { getDataAction, getConfigAction, getFilterListsAction, getFixValue, getFixID } =
-  formSlice.actions;
+export const {
+  getDataAction,
+  getConfigAction,
+  getFilterListsAction,
+  getFixValue,
+  getFixID,
+  setOrderFormList,
+  setOrderList,
+} = formSlice.actions;
 export default formSlice.reducer;
