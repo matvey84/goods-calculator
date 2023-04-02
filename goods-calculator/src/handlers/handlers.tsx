@@ -132,6 +132,5 @@ export type calculatorType = {
 export const multiplicityCheck = (value: string, step: number): boolean => {
   const stepToMilimetrs = step * 1000;
   const valueToMilimetrs = Number(value) * 1000;
-  console.log(valueToMilimetrs % stepToMilimetrs === 0, valueToMilimetrs, stepToMilimetrs);
   return valueToMilimetrs % stepToMilimetrs === 0;
 };
