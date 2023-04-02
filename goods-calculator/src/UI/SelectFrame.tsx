@@ -30,7 +30,7 @@ const SelectFrame = React.forwardRef(
           {!allFrames.length
             ? 'Loading...'
             : allFrames.map((frame) => (
-                <option key={nanoid()} className="user-form-select-option" value={frame.step}>
+                <option key={frame.key} className="user-form-select-option" value={frame.step}>
                   {frame.name}
                 </option>
               ))}

@@ -32,7 +32,7 @@ const SelectPipe = React.forwardRef(
             ---Трубы----
           </option>
           {pipes.map((pipe) => (
-            <option key={nanoid()} className="user-form-select-option" value={JSON.stringify(pipe)}>
+            <option key={pipe.id} className="user-form-select-option" value={JSON.stringify(pipe)}>
               {pipe.name}
             </option>
           ))}

@@ -43,7 +43,7 @@ const SelectList = React.forwardRef(
             : currentMaterials().map((material) => (
                 <option
                   id={material.id}
-                  key={nanoid()}
+                  key={material.id}
                   className="user-form-select-option"
                   value={JSON.stringify(material)}
                 >

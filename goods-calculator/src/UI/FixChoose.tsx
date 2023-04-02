@@ -20,7 +20,7 @@ const FixChoose = React.forwardRef(
         {allFix.map((fix) => (
           <>
             <input
-              key={nanoid()}
+              key={fix.id}
               required={required}
               className="order-form_filter-button"
               ref={ref}
@@ -34,6 +34,7 @@ const FixChoose = React.forwardRef(
               }
             />
             <label
+              key={nanoid()}
               htmlFor={fix.id}
               className={
                 fix.id === currentFixID

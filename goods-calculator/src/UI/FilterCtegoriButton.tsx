@@ -22,6 +22,7 @@ const FilterListMaterial = React.forwardRef(
         {filterCategory.map((category) => (
           <>
             <input
+              key={category.key}
               defaultChecked={category.key === listMaterial}
               className="order-form_filter-button"
               ref={ref}
@@ -32,6 +33,7 @@ const FilterListMaterial = React.forwardRef(
               onClick={(e: React.MouseEvent<HTMLInputElement>) => filterListHandle(e)}
             />
             <label
+              key={nanoid()}
               htmlFor={category.key}
               className={
                 category.key === listMaterial
