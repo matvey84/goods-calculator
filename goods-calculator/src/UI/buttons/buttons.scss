@@ -1,0 +1,93 @@
+
+$main-bg: #000000;
+$main-color: green;
+$main-red-color: red;
+
+.button-edit-note,
+.button-delete-note,
+.button-reset-filter {
+    width: 25px;
+    height: 25px;
+    background-color: initial;
+    border: none;
+    cursor: pointer;
+    margin: auto 5px auto 4px;
+}
+.button-reset-filter {
+  position: absolute;
+  top: -15.5px;
+  right: 0;
+  border: 1px solid $main-red-color;
+  border-radius: 3px;
+  transition: all .5s;
+  z-index: 1000;
+  opacity: 1;
+}
+
+.button-reset-filter:hover {
+  box-shadow: 0px 0px 12px 5px rgba(255, 0, 0, 0.2) inset;
+}
+
+
+.button-reset-filter svg path {
+  stroke: none; 
+  stroke-width: 1; 
+  stroke-dasharray: none; 
+  stroke-linecap: butt; 
+  stroke-linejoin: miter; 
+  stroke-miterlimit: 10; 
+  fill: var($main-red-color); 
+  fill-rule: nonzero; 
+  opacity: 1;
+  transform: matrix(1 0 0 1 0 0);
+}
+.button-reset-filter:active svg path {
+  fill: $main-color;
+}
+
+.button-reset-filter:active {
+  border-color: $main-color;
+}
+
+.button-edit-note:hover,
+.button-delete-note:hover{
+    outline: 1px solid $main-color;
+    border-radius: 3px;
+    box-shadow: 0px 0px 12px 5px rgba(0, 128, 0, 0.2) inset;
+}
+
+.button-delete-note svg {
+    height: 100%;
+    width: 100%;
+}
+
+.button-edit-note .svg-icon {
+  overflow: hidden;
+  height: 85%;
+  width: 85%;
+
+  path {
+    fill: $main-color;
+    height: 90%;
+    width: 90%;
+  }
+}
+
+.button-edit-note:active,
+.button-delete-note:active {
+  background: $main-color;
+  border-radius: 3px;
+}
+
+.button-edit-note:active .svg-icon path,
+.button-delete-note:active svg path {
+  fill: black;
+}
+
+.button-delete-note svg path {
+    fill: $main-red-color;
+}
+.button-delete-note:active svg path {
+  fill: $main-red-color;
+}
+
