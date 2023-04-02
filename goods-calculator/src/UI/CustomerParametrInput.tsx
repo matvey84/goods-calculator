@@ -28,6 +28,7 @@ const CastomerParametrInput = React.forwardRef(
         placeholder={`${name === 'length' ? 'длинна' : 'ширина'} в метрах`}
         onChange={onChange}
         onBlur={onBlur}
+        disabled={(name !== 'length' && !!errors.length) || (name !== 'width' && !!errors.width)}
         className={
           currenInputError === name
             ? 'order-form_parametr-input__error'

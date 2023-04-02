@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { dataParser, orderCreater } from '../../handlers/handlers';
+import { dataParser, multiplicityCheck, orderCreater } from '../../handlers/handlers';
 import { getFilterListsAction, resetStore, setOrderFormList } from '../../redux/formSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { currentOrderData, IList, IOrderFormData, orderFormDataConfig } from '../../types/types';
@@ -22,6 +22,8 @@ function OrderForm() {
   const width = sizeInputConfig.find((config) => config.key === 'width');
   const length = sizeInputConfig.find((config) => config.key === 'length');
   const [errorInputMessage, setErrorInputMessage] = useState<string>('');
+  const converterMM = 1000;
+  const decimalConverterMM = 100;
 
   const {
     register,
@@ -47,7 +49,12 @@ function OrderForm() {
   });
   const filter = register('category');
   const widthInput = register('width', {
-    validate: (value) => !isNaN(+value) || 'Только цифры',
+    validate: (value) =>
+      isNaN(+value)
+        ? 'Только цифры'
+        : multiplicityCheck(value, width!.step)
+        ? value
+        : `Должно быть кратно ${width!.step * converterMM} мм. Пример: (${Number(value) + 0.1})`,
     valueAsNumber: true,
     required: 'Это обязательное поле!',
     min: {
@@ -61,7 +68,12 @@ function OrderForm() {
   });
 
   const lengthInput = register('length', {
-    validate: (value) => !isNaN(+value) || 'Только цифры',
+    validate: (value) =>
+      isNaN(+value)
+        ? 'Только цифры'
+        : multiplicityCheck(value, length!.step)
+        ? value
+        : `Должно быть кратно ${length!.step * converterMM} мм. Пример: (${Number(value) + 0.1})`,
     valueAsNumber: true,
     required: 'Это обязательное поле!',
     min: {
@@ -75,8 +87,6 @@ function OrderForm() {
   });
 
   const formSubmitHandler: SubmitHandler<IOrderFormData> = (data: IOrderFormData) => {
-    const converterMM = 1000;
-    const decimalConverterMM = 100;
     const list: IList = JSON.parse(data.list);
 
     const currentFixValue = String(
@@ -85,14 +95,8 @@ function OrderForm() {
     const configuration: orderFormDataConfig = {
       type: 'orderConfig',
       fixValue: currentFixValue,
-      length:
-        Number(data.length) % 10 === 0
-          ? String(Number(data.length) * decimalConverterMM)
-          : String(Number(data.length) * converterMM),
-      width:
-        Number(data.width) % 10 === 0
-          ? String(Number(data.width) * decimalConverterMM)
-          : String(Number(data.width) * converterMM),
+      length: String(Number(data.length) * converterMM),
+      width: String(Number(data.width) * converterMM),
       frameStep: String(Number(data.frameStep) * converterMM),
     };
     const completedData: currentOrderData = {
