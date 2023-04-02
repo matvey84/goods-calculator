@@ -18,12 +18,13 @@ function OrderForm() {
   const dispatch = useAppDispatch();
   const sizeInputConfig = useAppSelector((state) => state.formSlice.sizeInputConfig);
   const allFixConfig = useAppSelector((state) => state.formSlice.allFixConfig);
+  const editOrderFormData = useAppSelector((state) => state.formSlice.editOrderFormData);
+  const isEditOrder = useAppSelector((state) => state.formSlice.isEditOrder);
   const goodsType = useAppSelector((state) => state.formSlice.goodsType);
   const width = sizeInputConfig.find((config) => config.key === 'width');
   const length = sizeInputConfig.find((config) => config.key === 'length');
   const [errorInputMessage, setErrorInputMessage] = useState<string>('');
   const converterMM = 1000;
-  const decimalConverterMM = 100;
 
   const {
     register,
@@ -100,7 +101,7 @@ function OrderForm() {
       frameStep: String(Number(data.frameStep) * converterMM),
     };
     const completedData: currentOrderData = {
-      id: nanoid(),
+      id: isEditOrder ? editOrderFormData!.id! : nanoid(),
       list: data.list,
       pipe: data.pipe,
       fix: data.fix,
@@ -134,7 +135,12 @@ function OrderForm() {
 
   return (
     <section className="order-form-field">
-      <form onSubmit={handleSubmit(formSubmitHandler)} className="order-form">
+      <form
+        onSubmit={handleSubmit(formSubmitHandler)}
+        className="order-form"
+        style={{ outline: isEditOrder ? '1px solid green' : 'none' }}
+      >
+        {isEditOrder && <h3 className="edit-order-title">Внесите изменения!</h3>}
         <ButtonResetForm reset={reset} />
         <fieldset className="order-form_filter-block">
           <legend>Фильтр кровельного покрытия</legend>

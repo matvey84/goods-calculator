@@ -24,10 +24,11 @@ interface IFormSlice {
   filterCategory: IMaterial[];
   filteredList: IList[];
   listMaterial: string;
-  // currentFixValue: number | undefined;
   currentFixID: string;
   orderFormDataList: parsedOrderData[];
   orderList: IOrder[][];
+  editOrderFormData: parsedOrderData | null;
+  isEditOrder: boolean;
 }
 const initialState: IFormSlice = {
   goodsType: [],
@@ -40,10 +41,11 @@ const initialState: IFormSlice = {
   filterCategory: [],
   filteredList: [],
   listMaterial: 'all',
-  // currentFixValue: 5,
   currentFixID: '',
   orderFormDataList: [],
   orderList: [],
+  editOrderFormData: null,
+  isEditOrder: false,
 };
 export const formSlice = createSlice({
   name: 'form',
@@ -88,13 +90,6 @@ export const formSlice = createSlice({
         (material) => material.material === action.payload
       );
     },
-    // getFixValue(state, action: PayloadAction<string>) {
-    //   const currentListMaterial: IList = JSON.parse(action.payload);
-    //   const currentFixConfig = state.allFixConfig.find(
-    //     (config) => config.key === currentListMaterial.material
-    //   );
-    //   // state.currentFixValue = currentFixConfig?.value;
-    // },
     getFixID(state, action: PayloadAction<string>) {
       state.currentFixID = action.payload;
     },
@@ -103,14 +98,31 @@ export const formSlice = createSlice({
     },
 
     setOrderList(state, action: PayloadAction<IOrder[]>) {
-      state.orderList = [...state.orderList, action.payload];
+      console.log(action.payload);
+      state.orderList = state.orderList.some((order) =>
+        order.some((order) => order.orderFormDataID === action.payload[0].orderFormDataID)
+      )
+        ? state.orderList.map((order) => {
+            return order.some((obj) =>
+              action.payload.every((order) => order.orderFormDataID === obj.orderFormDataID)
+            )
+              ? action.payload
+              : order;
+          })
+        : [...state.orderList, action.payload];
     },
     removeOrder(state, action: PayloadAction<string>) {
       state.orderList = state.orderList.filter((arr) => arr[0].orderFormDataID !== action.payload);
-      state.allLists = state.allLists.filter((obj) => obj.id !== action.payload);
+      state.orderFormDataList = state.orderFormDataList.filter((obj) => obj.id !== action.payload);
     },
     resetStore(state) {
       state.currentFixID = '';
+      state.isEditOrder = false;
+      state.editOrderFormData = null;
+    },
+    getEditFormOrderData(state, action: PayloadAction<string>) {
+      state.isEditOrder = !state.isEditOrder;
+      state.editOrderFormData = state.orderFormDataList.find((data) => data.id === action.payload)!;
     },
   },
 });
@@ -118,11 +130,11 @@ export const {
   getDataAction,
   getConfigAction,
   getFilterListsAction,
-  // getFixValue,
   getFixID,
   setOrderFormList,
   setOrderList,
   removeOrder,
   resetStore,
+  getEditFormOrderData,
 } = formSlice.actions;
 export default formSlice.reducer;
