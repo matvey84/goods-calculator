@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { dataParser, orderCreater } from '../../handlers/handlers';
-import { getFilterListsAction, getFixID, setOrderFormList } from '../../redux/formSlice';
+import { getFilterListsAction, resetStore, setOrderFormList } from '../../redux/formSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { currentOrderData, IList, IOrderFormData, orderFormDataConfig } from '../../types/types';
 import CastomerParametrInput from '../../UI/CustomerParametrInput';
@@ -12,6 +12,7 @@ import SelectList from '../../UI/SelectList';
 import SelectPipe from '../../UI/SelectPipe';
 import './orderFormStyle.scss';
 import { nanoid } from '@reduxjs/toolkit';
+import ButtonResetForm from '../../UI/buttons/ButtonResetForm';
 
 function OrderForm() {
   const dispatch = useAppDispatch();
@@ -105,7 +106,7 @@ function OrderForm() {
     const parsedData = dataParser(completedData, goodsType);
     dispatch(setOrderFormList(parsedData));
     dispatch(orderCreater(parsedData, goodsType));
-    dispatch(getFixID(''));
+    dispatch(resetStore());
   };
 
   useEffect(() => {
@@ -121,7 +122,7 @@ function OrderForm() {
   useEffect(
     () => () => {
       dispatch(getFilterListsAction('all'));
-      dispatch(getFixID(''));
+      dispatch(resetStore());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -130,6 +131,7 @@ function OrderForm() {
   return (
     <section className="order-form-field">
       <form onSubmit={handleSubmit(formSubmitHandler)} className="order-form">
+        <ButtonResetForm reset={reset} />
         <fieldset className="order-form_filter-block">
           <legend>Фильтр кровельного покрытия</legend>
           <FilterListMaterial name={filter.name} ref={filter.ref} />

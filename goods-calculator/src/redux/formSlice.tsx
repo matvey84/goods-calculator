@@ -24,7 +24,7 @@ interface IFormSlice {
   filterCategory: IMaterial[];
   filteredList: IList[];
   listMaterial: string;
-  currentFixValue: number | undefined;
+  // currentFixValue: number | undefined;
   currentFixID: string;
   orderFormDataList: parsedOrderData[];
   orderList: IOrder[][];
@@ -40,7 +40,7 @@ const initialState: IFormSlice = {
   filterCategory: [],
   filteredList: [],
   listMaterial: 'all',
-  currentFixValue: 5,
+  // currentFixValue: 5,
   currentFixID: '',
   orderFormDataList: [],
   orderList: [],
@@ -88,13 +88,13 @@ export const formSlice = createSlice({
         (material) => material.material === action.payload
       );
     },
-    getFixValue(state, action: PayloadAction<string>) {
-      const currentListMaterial: IList = JSON.parse(action.payload);
-      const currentFixConfig = state.allFixConfig.find(
-        (config) => config.key === currentListMaterial.material
-      );
-      state.currentFixValue = currentFixConfig?.value;
-    },
+    // getFixValue(state, action: PayloadAction<string>) {
+    //   const currentListMaterial: IList = JSON.parse(action.payload);
+    //   const currentFixConfig = state.allFixConfig.find(
+    //     (config) => config.key === currentListMaterial.material
+    //   );
+    //   // state.currentFixValue = currentFixConfig?.value;
+    // },
     getFixID(state, action: PayloadAction<string>) {
       state.currentFixID = action.payload;
     },
@@ -105,15 +105,24 @@ export const formSlice = createSlice({
     setOrderList(state, action: PayloadAction<IOrder[]>) {
       state.orderList = [...state.orderList, action.payload];
     },
+    removeOrder(state, action: PayloadAction<string>) {
+      state.orderList = state.orderList.filter((arr) => arr[0].orderFormDataID !== action.payload);
+      state.allLists = state.allLists.filter((obj) => obj.id !== action.payload);
+    },
+    resetStore(state) {
+      state.currentFixID = '';
+    },
   },
 });
 export const {
   getDataAction,
   getConfigAction,
   getFilterListsAction,
-  getFixValue,
+  // getFixValue,
   getFixID,
   setOrderFormList,
   setOrderList,
+  removeOrder,
+  resetStore,
 } = formSlice.actions;
 export default formSlice.reducer;
