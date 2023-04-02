@@ -15,7 +15,7 @@ $main-red-color: red;
 }
 .button-reset-filter {
   position: absolute;
-  top: -15.5px;
+  top: -25px;
   right: 0;
   border: 1px solid $main-red-color;
   border-radius: 3px;
@@ -55,10 +55,56 @@ $main-red-color: red;
     border-radius: 3px;
     box-shadow: 0px 0px 12px 5px rgba(0, 128, 0, 0.2) inset;
 }
+.button-edit-note:disabled {
+  width: 25px;
+  height: 25px;
+  background-color: initial;
+  border: none;
+  cursor: pointer;
+  margin: auto 5px auto 4px;
+  outline: 1px solid gray;
+  border-radius: 3px;
+  background: gray;
+}
+.button-edit-note:disabled:hover {
+  width: 25px;
+  height: 25px;
+  background-color: initial;
+  border: none;
+  cursor: pointer;
+  margin: auto 5px auto 4px;
+  outline: 1px solid gray;
+  background: gray;
+  border-radius: 3px;
+  box-shadow: none;
+  cursor: auto;
+}
 
 .button-delete-note svg {
     height: 100%;
     width: 100%;
+}
+.button-edit-note:disabled .svg-icon {
+  overflow: hidden;
+  height: 85%;
+  width: 85%;
+
+  path {
+    fill: whitesmoke;
+    height: 90%;
+    width: 90%;
+  }
+}
+.button-edit-note:disabled:hover .svg-icon {
+  overflow: hidden;
+  height: 85%;
+  width: 85%;
+
+  path {
+    fill: whitesmoke;
+    height: 90%;
+    width: 90%;
+  }
 }
 
 .button-edit-note .svg-icon {
