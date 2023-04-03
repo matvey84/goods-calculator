@@ -1,4 +1,3 @@
-import { nanoid } from '@reduxjs/toolkit';
 import React, { useCallback } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useAppSelector } from '../redux/hooks';

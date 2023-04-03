@@ -81,7 +81,7 @@ export const calculator = (
 
   switch (obj.type) {
     case 'list':
-      const listsValue = constructionArea / Number(obj.width) / converterMM; //штук
+      const listsValue = constructionArea / Number(obj.width) / converterMM;
       const commonValueListArea = oneListArea * listsValue;
       const commonCostList = commonValueListArea * Number(obj.price);
       const listCostNDS = commonCostList * ((nds + persent) / persent);

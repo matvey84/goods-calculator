@@ -1,8 +1,6 @@
 import { nanoid } from '@reduxjs/toolkit';
 import React from 'react';
-import { FieldErrors } from 'react-hook-form';
 import { useAppSelector } from '../redux/hooks';
-import { IOrderFormData } from '../types/types';
 
 interface IProp {
   name: string;
