@@ -36,11 +36,13 @@ function OrderForm() {
   });
 
   const selectPipe = register('pipe', { required: 'Это обязательное поле!' });
+
   const selectList = register('list', {
     required: 'Это обязательное поле!',
   });
 
   const selectFrame = register('frameStep', { required: 'Это обязательное поле!' });
+
   const chooseFix = register('fix', {
     required: 'Это обязательное поле!',
     validate: (value) => Boolean(value) || 'Это обязательное поле!',
@@ -48,14 +50,18 @@ function OrderForm() {
       e.currentTarget.classList.toggle('order-form_filter-block__label-green');
     },
   });
+
   const filter = register('category');
+
   const widthInput = register('width', {
     validate: (value) =>
       isNaN(+value)
         ? 'Только цифры'
         : multiplicityCheck(value, width!.step)
         ? value
-        : `Должно быть кратно ${width!.step * converterMM} мм. Пример: (${Number(value) + 0.1})`,
+        : `Должно быть кратно ${width!.step * converterMM} мм. Пример: (${(
+            Number(value) + 0.1
+          ).toFixed(1)})`,
     valueAsNumber: true,
     required: 'Это обязательное поле!',
     min: {
@@ -74,7 +80,9 @@ function OrderForm() {
         ? 'Только цифры'
         : multiplicityCheck(value, length!.step)
         ? value
-        : `Должно быть кратно ${length!.step * converterMM} мм. Пример: (${Number(value) + 0.1})`,
+        : `Должно быть кратно ${length!.step * converterMM} мм. Пример: (${(
+            Number(value) + 0.1
+          ).toFixed(1)})`,
     valueAsNumber: true,
     required: 'Это обязательное поле!',
     min: {
