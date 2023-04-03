@@ -98,7 +98,6 @@ export const formSlice = createSlice({
     },
 
     setOrderList(state, action: PayloadAction<IOrder[]>) {
-      console.log(action.payload);
       state.orderList = state.orderList.some((order) =>
         order.some((order) => order.orderFormDataID === action.payload[0].orderFormDataID)
       )
