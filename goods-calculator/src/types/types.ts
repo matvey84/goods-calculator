@@ -119,6 +119,7 @@ export type commonParsedOrderData = {
 export interface IOrder {
   id: string;
   orderFormDataID: string;
+  listsValue: string;
   type: string;
   name: string;
   unit: string;
@@ -129,3 +130,10 @@ export interface IOrder {
   costNDS: string;
   [x: string]: string;
 }
+
+export type calculatorType = {
+  listsValue?: number;
+  commonCost: number;
+  ammount: number;
+  costNDS: number;
+};

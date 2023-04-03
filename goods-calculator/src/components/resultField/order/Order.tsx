@@ -47,7 +47,7 @@ function Order(props: IProp) {
                     {++i}
                   </td>
                   <td key={nanoid()} className="table-cell">
-                    {row.name}
+                    {row.type === 'list' ? `${row.name} (${row.listsValue}) листов` : row.name}
                   </td>
                   <td key={nanoid()} className="table-cell">
                     {row.unit}

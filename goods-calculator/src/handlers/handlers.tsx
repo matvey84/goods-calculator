@@ -2,6 +2,7 @@ import { setOrderList } from '../redux/formSlice';
 import { AppDispatch } from '../redux/store';
 import {
   IOrder,
+  calculatorType,
   commonParsedOrderData,
   currentOrderData,
   orderFormDataConfig,
@@ -19,6 +20,7 @@ export const orderCreater =
       unit: '',
       ammount: '',
       price: '',
+      listsValue: '',
       commonCost: '',
       nds: '',
       costNDS: '',
@@ -42,6 +44,7 @@ export const orderCreater =
           name: obj.name,
           price: String(obj.price),
           unit: obj.unit,
+          listsValue: String(calculator(obj, orderConfig, list.width)!.listsValue),
           ammount: String(calculator(obj, orderConfig, list.width)!.ammount),
           commonCost: String(calculator(obj, orderConfig, list.width)!.commonCost),
           nds: '20',
@@ -67,6 +70,8 @@ export const calculator = (
   orderConfig: orderFormDataConfig,
   listWidth: number
 ): calculatorType | undefined => {
+  const listLength = 1;
+  const oneListArea = listWidth * listLength;
   const converterMM = 1000;
   const constructionArea = (Number(orderConfig.length) * Number(orderConfig.width)) / converterMM;
   const sidePipesAmmount = 2;
@@ -76,12 +81,14 @@ export const calculator = (
 
   switch (obj.type) {
     case 'list':
-      const listAmmount = constructionArea / Number(obj.width) / converterMM;
-      const commonCostList = listAmmount * Number(obj.price);
+      const listsValue = constructionArea / Number(obj.width) / converterMM; //штук
+      const commonValueListArea = oneListArea * listsValue;
+      const commonCostList = commonValueListArea * Number(obj.price);
       const listCostNDS = commonCostList * ((nds + persent) / persent);
       return {
+        listsValue: Number(listsValue.toFixed(2)),
         commonCost: Number(commonCostList.toFixed(2)),
-        ammount: Math.ceil(listAmmount),
+        ammount: Math.ceil(commonValueListArea),
         costNDS: Number(listCostNDS.toFixed(2)),
       };
     case 'pipe':
@@ -121,12 +128,6 @@ export const calculator = (
     default:
       return undefined;
   }
-};
-
-export type calculatorType = {
-  commonCost: number;
-  ammount: number;
-  costNDS: number;
 };
 
 export const multiplicityCheck = (value: string, step: number): boolean => {
