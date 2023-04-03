@@ -1,5 +1,4 @@
-import { nanoid } from '@reduxjs/toolkit';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { getFixID } from '../redux/formSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
@@ -18,9 +17,8 @@ const FixChoose = React.forwardRef(
     return (
       <>
         {allFix.map((fix) => (
-          <>
+          <Fragment key={crypto.randomUUID()}>
             <input
-              key={fix.id}
               required={required}
               className="order-form_filter-button"
               ref={ref}
@@ -34,7 +32,7 @@ const FixChoose = React.forwardRef(
               }
             />
             <label
-              key={nanoid()}
+              key={crypto.randomUUID()}
               htmlFor={fix.id}
               className={
                 fix.id === currentFixID
@@ -44,7 +42,7 @@ const FixChoose = React.forwardRef(
             >
               {fix.name}
             </label>
-          </>
+          </Fragment>
         ))}
       </>
     );

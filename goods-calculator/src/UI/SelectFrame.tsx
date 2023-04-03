@@ -1,8 +1,5 @@
-import { nanoid } from '@reduxjs/toolkit';
-import React from 'react';
-import { FieldErrors } from 'react-hook-form';
+import React, { Fragment } from 'react';
 import { useAppSelector } from '../redux/hooks';
-import { IOrderFormData } from '../types/types';
 
 interface IProp {
   name: string;
@@ -16,26 +13,32 @@ const SelectFrame = React.forwardRef(
     const allFrames = useAppSelector((state) => state.formSlice.allFrames);
 
     return (
-      <fieldset>
-        <legend>Выбор прочности</legend>
-        <select
-          key={nanoid()}
-          name={name}
-          ref={ref}
-          id={name}
-          onBlur={onBlur}
-          onChange={onChange}
-          className="order-form-select"
-        >
-          {!allFrames.length
-            ? 'Loading...'
-            : allFrames.map((frame) => (
-                <option key={frame.key} className="user-form-select-option" value={frame.step}>
-                  {frame.name}
-                </option>
-              ))}
-        </select>
-      </fieldset>
+      <Fragment>
+        <fieldset>
+          <legend>Выбор прочности</legend>
+          <select
+            key={crypto.randomUUID()}
+            name={name}
+            ref={ref}
+            id={name}
+            onBlur={onBlur}
+            onChange={onChange}
+            className="order-form-select"
+          >
+            {!allFrames.length
+              ? 'Loading...'
+              : allFrames.map((frame) => (
+                  <option
+                    key={crypto.randomUUID()}
+                    className="user-form-select-option"
+                    value={frame.step}
+                  >
+                    {frame.name}
+                  </option>
+                ))}
+          </select>
+        </fieldset>
+      </Fragment>
     );
   }
 );

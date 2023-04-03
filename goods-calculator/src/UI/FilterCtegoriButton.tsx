@@ -1,5 +1,5 @@
 import { nanoid } from '@reduxjs/toolkit';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { getFilterListsAction } from '../redux/formSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
@@ -20,9 +20,8 @@ const FilterListMaterial = React.forwardRef(
     return (
       <>
         {filterCategory.map((category) => (
-          <>
+          <Fragment key={crypto.randomUUID()}>
             <input
-              key={category.key}
               defaultChecked={category.key === listMaterial}
               className="order-form_filter-button"
               ref={ref}
@@ -43,7 +42,7 @@ const FilterListMaterial = React.forwardRef(
             >
               {category.name}
             </label>
-          </>
+          </Fragment>
         ))}
       </>
     );

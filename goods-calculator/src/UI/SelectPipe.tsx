@@ -1,5 +1,4 @@
-import { nanoid } from '@reduxjs/toolkit';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useAppSelector } from '../redux/hooks';
 import { IOrderFormData } from '../types/types';
@@ -16,28 +15,34 @@ const SelectPipe = React.forwardRef(
     const { name, onChange, errors, onBlur } = props;
 
     return (
-      <fieldset className={errors.pipe ? 'error-fieldset' : ''}>
-        <legend>{errors.pipe ? errors.pipe.message : 'Трубы'}</legend>
-        <select
-          name={name}
-          ref={ref}
-          id={name}
-          onBlur={onBlur}
-          required
-          onChange={onChange}
-          defaultValue=""
-          className="order-form-select"
-        >
-          <option className="user-form-select-option" disabled value="">
-            ---Трубы----
-          </option>
-          {pipes.map((pipe) => (
-            <option key={pipe.id} className="user-form-select-option" value={JSON.stringify(pipe)}>
-              {pipe.name}
+      <Fragment>
+        <fieldset className={errors.pipe ? 'error-fieldset' : ''}>
+          <legend>{errors.pipe ? errors.pipe.message : 'Трубы'}</legend>
+          <select
+            name={name}
+            ref={ref}
+            id={name}
+            onBlur={onBlur}
+            required
+            onChange={onChange}
+            defaultValue=""
+            className="order-form-select"
+          >
+            <option className="user-form-select-option" disabled value="">
+              ---Трубы----
             </option>
-          ))}
-        </select>
-      </fieldset>
+            {pipes.map((pipe) => (
+              <option
+                key={crypto.randomUUID()}
+                className="user-form-select-option"
+                value={JSON.stringify(pipe)}
+              >
+                {pipe.name}
+              </option>
+            ))}
+          </select>
+        </fieldset>
+      </Fragment>
     );
   }
 );

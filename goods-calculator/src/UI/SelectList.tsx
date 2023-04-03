@@ -1,5 +1,4 @@
-import { nanoid } from '@reduxjs/toolkit';
-import React, { useCallback } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useAppSelector } from '../redux/hooks';
 import { IOrderFormData } from '../types/types';
@@ -23,35 +22,37 @@ const SelectList = React.forwardRef(
       return current;
     }, [allLists, filteredListMaterial, listMaterial]);
     return (
-      <fieldset className={errors.list ? 'error-fieldset' : ''}>
-        <legend>{errors.list ? errors.list.message : 'Выбор покрытия'}</legend>
-        <select
-          name={name}
-          ref={ref}
-          id={name}
-          required
-          onBlur={onBlur}
-          onChange={onChange}
-          className="order-form-select"
-          defaultValue=""
-        >
-          <option className="user-form-select-option" disabled value="">
-            ---Материал покрытия---
-          </option>
-          {!currentMaterials().length
-            ? 'Loading...'
-            : currentMaterials().map((material) => (
-                <option
-                  id={material.id}
-                  key={material.id}
-                  className="user-form-select-option"
-                  value={JSON.stringify(material)}
-                >
-                  {material.name}
-                </option>
-              ))}
-        </select>
-      </fieldset>
+      <Fragment>
+        <fieldset className={errors.list ? 'error-fieldset' : ''}>
+          <legend>{errors.list ? errors.list.message : 'Выбор покрытия'}</legend>
+          <select
+            name={name}
+            ref={ref}
+            id={name}
+            required
+            onBlur={onBlur}
+            onChange={onChange}
+            className="order-form-select"
+            defaultValue=""
+          >
+            <option className="user-form-select-option" disabled value="">
+              ---Материал покрытия---
+            </option>
+            {!currentMaterials().length
+              ? 'Loading...'
+              : currentMaterials().map((material) => (
+                  <option
+                    id={material.id}
+                    key={crypto.randomUUID()}
+                    className="user-form-select-option"
+                    value={JSON.stringify(material)}
+                  >
+                    {material.name}
+                  </option>
+                ))}
+          </select>
+        </fieldset>
+      </Fragment>
     );
   }
 );

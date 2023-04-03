@@ -2,7 +2,6 @@ import React from 'react';
 import './resultFieldStyle.scss';
 import Order from './order/Order';
 import { useAppSelector } from '../../redux/hooks';
-import { nanoid } from '@reduxjs/toolkit';
 
 function ResultField() {
   const orderList = useAppSelector((state) => state.formSlice.orderList);
@@ -10,7 +9,7 @@ function ResultField() {
     <section className="order-list">
       {!orderList.length
         ? 'Loading...'
-        : orderList.map((order) => <Order key={nanoid()} order={order} />)}
+        : orderList.map((order) => <Order key={crypto.randomUUID()} order={order} />)}
     </section>
   );
 }

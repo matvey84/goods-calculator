@@ -3,6 +3,7 @@ import { FieldErrors } from 'react-hook-form';
 import { IOrderFormData } from '../types/types';
 
 interface IProp {
+  id: string;
   name: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -11,7 +12,7 @@ interface IProp {
 }
 const CastomerParametrInput = React.forwardRef(
   (props: IProp, ref: React.LegacyRef<HTMLInputElement> | undefined) => {
-    const { name, onChange, onBlur, errors } = props;
+    const { name, onChange, onBlur, errors, id } = props;
 
     const currenInputError = useMemo(() => {
       const currentInputError = errors.length ? errors.length : errors.width;
@@ -20,6 +21,7 @@ const CastomerParametrInput = React.forwardRef(
 
     return (
       <input
+        id={id}
         ref={ref}
         autoComplete="off"
         required

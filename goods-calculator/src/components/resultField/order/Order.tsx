@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useAppSelector } from '../../../redux/hooks';
-import { nanoid } from '@reduxjs/toolkit';
 import { IOrder } from '../../../types/types';
 import { ButtonEditOrder } from '../../../UI/buttons/ButtonEditOrder';
 import { ButtonDeleteOrder } from '../../../UI/buttons/ButtonDeleteOrder';
@@ -10,7 +9,6 @@ interface IProp {
 function Order(props: IProp) {
   const order = props.order;
   const editOrderFormData = useAppSelector((state) => state.formSlice.editOrderFormData?.id);
-  const orderRef = useRef<HTMLTableElement>(null);
   return (
     <div className="order" id={order[0].orderFormDataID}>
       <section className="order-table_button-section">
@@ -20,7 +18,6 @@ function Order(props: IProp) {
       <table
         className="order-table"
         id={order[0].orderFormDataID}
-        ref={orderRef}
         style={{
           background: editOrderFormData === order[0].orderFormDataID ? '#c5f7c5' : 'transparent',
         }}
@@ -42,34 +39,20 @@ function Order(props: IProp) {
           {!order.length
             ? 'Loading...'
             : order.map((row, i) => (
-                <tr key={nanoid()} className="order-table_row">
-                  <td key={nanoid()} className="table-cell">
-                    {++i}
-                  </td>
-                  <td key={nanoid()} className="table-cell">
+                <tr key={crypto.randomUUID()} className="order-table_row">
+                  <td className="table-cell">{++i}</td>
+                  <td className="table-cell">
                     {row.type === 'list' ? `${row.name} (${row.listsValue}) листов` : row.name}
                   </td>
-                  <td key={nanoid()} className="table-cell">
-                    {row.unit}
-                  </td>
-                  <td key={nanoid()} className="table-cell">
-                    {row.ammount}
-                  </td>
-                  <td key={nanoid()} className="table-cell">
-                    {Number(row.price).toFixed(2)}
-                  </td>
-                  <td key={nanoid()} className="table-cell">
-                    {Number(row.commonCost).toFixed(2)}
-                  </td>
-                  <td key={nanoid()} className="table-cell">
-                    {row.nds}
-                  </td>
-                  <td key={nanoid()} className="table-cell">
+                  <td className="table-cell">{row.unit}</td>
+                  <td className="table-cell">{row.ammount}</td>
+                  <td className="table-cell">{Number(row.price).toFixed(2)}</td>
+                  <td className="table-cell">{Number(row.commonCost).toFixed(2)}</td>
+                  <td className="table-cell">{row.nds}</td>
+                  <td className="table-cell">
                     {((Number(row.commonCost) * Number(row.nds)) / 100).toFixed(2)}
                   </td>
-                  <td key={nanoid()} className="table-cell">
-                    {Number(row.costNDS).toFixed(2)}
-                  </td>
+                  <td className="table-cell">{Number(row.costNDS).toFixed(2)}</td>
                 </tr>
               ))}
           <tr className="order-table_footer">

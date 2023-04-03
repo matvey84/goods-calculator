@@ -137,8 +137,7 @@ function OrderForm() {
       dispatch(getFilterListsAction('all'));
       dispatch(resetStore());
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [dispatch]
   );
 
   return (
@@ -178,6 +177,7 @@ function OrderForm() {
         <fieldset className={errors?.width || errors?.length ? 'error-fieldset' : 'input-block'}>
           <legend>{!!errorInputMessage ? errorInputMessage : 'Параметры'}</legend>
           <CastomerParametrInput
+            id={crypto.randomUUID()}
             name={lengthInput.name}
             ref={lengthInput.ref}
             onChange={lengthInput.onChange}
@@ -186,6 +186,7 @@ function OrderForm() {
             required={lengthInput.required!}
           />
           <CastomerParametrInput
+            id={crypto.randomUUID()}
             name={widthInput.name}
             ref={widthInput.ref}
             onChange={widthInput.onChange}
