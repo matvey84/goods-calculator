@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/goods-calculator/static/css/main.36f8c44e.css",
+    "main.js": "/goods-calculator/static/js/main.225e3921.js",
+    "static/js/787.28cb0dcd.chunk.js": "/goods-calculator/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/goods-calculator/index.html",
+    "main.36f8c44e.css.map": "/goods-calculator/static/css/main.36f8c44e.css.map",
+    "main.225e3921.js.map": "/goods-calculator/static/js/main.225e3921.js.map",
+    "787.28cb0dcd.chunk.js.map": "/goods-calculator/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.36f8c44e.css",
+    "static/js/main.225e3921.js"
+  ]
+}
